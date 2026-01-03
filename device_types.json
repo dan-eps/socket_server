@@ -4,91 +4,173 @@
       "name": "BluRay Player",
       "port": 101,
       "status_variables": {
-        "PLAY_STATUS": {
-          "valid_values": ["ON", "PAUSE", "OFF"]
-        }
+        "PLAY_STATUS": { "valid_values": ["ON", "PAUSE", "OFF"] }
       },
       "valid_commands": [
-        {
-          "input": "PLAY?",
-          "function": "get",
-          "parameters": ["PLAY_STATUS"],
-          "output": "PLAY={PLAY_STATUS}"
-        },
-        {
-          "input": "PLAY=ON",
-          "function": "set",
-          "parameters": ["PLAY_STATUS", "ON"],
-          "output": "PLAY={PLAY_STATUS}"
-        },
-        {
-          "input": "PLAY=OFF",
-          "function": "set",
-          "parameters": ["PLAY_STATUS", "OFF"],
-          "output": "PLAY={PLAY_STATUS}"
-        },
-        {
-          "input": "PLAY=PAUSE",
-          "function": "set",
-          "parameters": ["PLAY_STATUS", "PAUSE"],
-          "output": "PLAY={PLAY_STATUS}"
-        },
-        {
-          "input": "NEXT",
-          "output": "NEXT"
-        },
-        {
-          "input": "LAST",
-          "output": "LAST"
-        },
-        {
-          "input": "FF",
-          "output": "FF"
-        },
-        {
-          "input": "REW",
-          "output": "REW"
-        }
+        { "input": "PLAY?", "function": "get", "parameters": ["PLAY_STATUS"], "output": "PLAY={PLAY_STATUS}" },
+        { "input": "PLAY=(?<_STATUS>ON|OFF|PAUSE)", "function": "set", "parameters": ["PLAY_STATUS","STATUS"], "output": "PLAY={PLAY_STATUS}" },
+        { "input": "NEXT", "output": "NEXT" },
+        { "input": "LAST", "output": "LAST" },
+        { "input": "FF", "output": "FF" },
+        { "input": "REW", "output": "REW" }
       ]
     },
+
     {
       "name": "Camera",
       "port": 102,
       "status_variables": {
-        "POWER_STATUS": {
-          "valid_values": ["ON", "OFF"]
+        "POWER_STATUS": { "valid_values": ["ON", "OFF"] }
+      },
+      "valid_commands": [
+        { "input": "POWER?", "function": "get", "parameters": ["POWER_STATUS"], "output": "POWER={POWER_STATUS}" },
+        { "input": "POWER=(?<_STATUS>ON|OFF)", "function": "set", "parameters": ["POWER_STATUS","_STATUS"], "output": "POWER={POWER_STATUS}" },
+        { "input": "PAN=(?<_DIRECTION>LEFT|RIGHT|STOP)", "output": "PAN={_DIRECTION}" },
+        { "input": "TILT=(?<_DIRECTION>UP|DOWN|STOP)", "output": "TILT={_DIRECTION}" },
+        { "input": "ZOOM=(?<_MODE>IN|OUT|STOP)", "output": "ZOOM={_MODE}" },
+        { "input": "RECALL PRESET=(?<_N>[1-6])", "output": "PRESET RECALLED={_N}" },
+        { "input": "STORE PRESET=(?<_N>[1-6])", "output": "PRESET STORED={_N}" }
+      ]
+    },
+
+    {
+      "name": "Cable TV Tuner",
+      "port": 103,
+      "status_variables": {
+        "CHANNEL_STATUS": {
+          "min": 0,
+          "max": 100 
         }
       },
       "valid_commands": [
-        {
-          "input": "POWER=ON",
-          "function": "set",
-          "parameters": ["POWER_STATUS", "ON"],
-          "output": "POWER={POWER_STATUS}"
-        },
-        {
-          "input": "PAN=LEFT",
-          "output": "PAN=LEFT"
-        },
-        {
-          "input": "PAN=RIGHT",
-          "output": "PAN=RIGHT"
-        },
-        {
-          "input": "PAN=STOP",
-          "output": "PAN=STOP"
-        },
-        {
-          "input": "POWER?",
-          "function": "get",
-          "parameters": ["POWER_STATUS"],
-          "output": "POWER={POWER_STATUS}"
-        }
+        { "input": "CHANNEL?", "function": "get", "parameters": ["CHANNEL_STATUS"], "output": "CHANNEL={CHANNEL_STATUS}" },
+        { "input": "CHANNEL=DOWN", "function": "dec", "parameters": ["CHANNEL_STATUS"], "output": "CHANNEL={CHANNEL_STATUS}" },
+        { "input": "CHANNEL=UP", "function": "inc", "parameters": ["CHANNEL_STATUS"], "output": "CHANNEL={CHANNEL_STATUS}" },
+        { "input": "CHANNEL=(?<_CH>)", "function": "set", "parameters": ["CHANNEL_STATUS","_CH"], "output": "CHANNEL={CHANNEL_STATUS}" }
       ]
     },
+
+    {
+      "name": "Display",
+      "port": 104,
+      "status_variables": {
+        "POWER_STATUS": { "valid_values": ["ON","OFF"] },
+        "INPUT_STATUS": {},
+        "VOLUME": {},
+        "VOLUME_MUTE": { "valid_values": ["ON","OFF"] },
+        "VIDEO_MUTE": { "valid_values": ["ON","OFF"] },
+        "MULTIVIEW": { "valid_values": ["ON","OFF"] }
+      },
+      "valid_commands": [
+        { "input": "POWER?", "function": "get", "parameters": ["POWER_STATUS"], "output": "POWER={POWER_STATUS}" },
+        { "input": "POWER=(?<_STATUS>ON|OFF)", "function": "set", "parameters": ["POWER_STATUS","STATUS"], "output": "POWER={POWER_STATUS}" },
+        { "input": "INPUT?", "function": "get", "parameters": ["INPUT_STATUS"], "output": "INPUT={INPUT_STATUS}" },
+        { "input": "INPUT=(?<_N>[1-4])", "function": "set", "parameters": ["INPUT_STATUS","_N"], "output": "INPUT={INPUT_STATUS}" },
+        { "input": "VOLUME?", "function": "get", "parameters": ["VOLUME"], "output": "VOLUME={VOLUME}" },
+        { "input": "VOLUME=(?<_VAL>)", "function": "set", "parameters": ["VOLUME","_VAL"], "output": "VOLUME={VOLUME}" },
+        { "input": "VOLUME=UP", "function": "inc", "parameters": ["VOLUME"], "output": "VOLUME={VOLUME}" },
+        { "input": "VOLUME=DOWN", "function": "dec", "parameters": ["VOLUME"], "output": "VOLUME={VOLUME}" },
+        { "input": "VOLUME MUTE=(?<_STATUS>ON|OFF)", "function": "set", "parameters": ["VOLUME_MUTE","_STATUS"], "output": "VOLUME MUTE={VOLUME_MUTE}" },
+        { "input": "VIDEO MUTE=(?<_STATUS>ON|OFF)", "function": "set", "parameters": ["VIDEO_MUTE","_STATUS"], "output": "VIDEO MUTE={VIDEO_MUTE}" },
+        { "input": "MULTIVIEW?", "function": "get", "parameters": ["MULTIVIEW"], "output": "MULTIVIEW={MULTIVIEW}" },
+        { "input": "MULTIVIEW=(?<_STATUS>ON|OFF)", "function": "set", "parameters": ["MULTIVIEW","_STATUS"], "output": "MULTIVIEW={MULTIVIEW}" }
+      ]
+    },
+
+    {
+      "name": "Level Display",
+      "port": 105,
+      "status_variables": {
+        "LEVELS": {}
+      },
+      "valid_commands": [
+        { "input": "SET VOLUME (?<_LEVEL>) (?<VOL>)", "output": "LEVEL {_LEVEL} = {VOL}" },
+        { "input": "ADJUST VOLUME (?<_LEVEL>) UP", "function": "inc", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL {LEVEL} = {LEVELS._LEVEL.VOLUME}" },
+        { "input": "ADJUST VOLUME (?<_LEVEL>) DOWN", "function": "dec", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL {LEVEL} = {LEVELS._LEVEL.VOLUME}" },
+        { "input": "SET VOLUME MUTE (?<_LEVEL>) (?<_STATUS>ON|OFF)", "function": "set", "parameters": ["LEVELS._LEVEL.MUTE", "_STATUS"], "output": "LEVEL MUTE {LEVEL} = {LEVELS._LEVEL.MUTE}" },
+        { "input": "VOLUME (?<_LEVEL>)?", "function": "get", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL {_LEVEL} = {VOL}" },
+        { "input": "VOLUME MUTE (?<_LEVEL>)?", "function": "get", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL MUTE {_LEVEL} = {LEVELS._LEVEL.VOLUME}" }
+      ]
+    },
+
+    {
+      "name": "Lighting",
+      "port": 106,
+      "status_variables": {
+        "PRESET": {}
+      },
+      "valid_commands": [
+        { "input": "PRESET?", "function": "get", "output": "PRESET={PRESET}" },
+        { "input": "SET PRESET (?<_N>)", "function": "set", "parameters": ["PRESET", "_N"], "output": "PRESET={PRESET}" }
+      ]
+    },
+
+    {
+      "name": "MatrixSwitch",
+      "port": 107,
+      "status_variables": {},
+      "valid_commands": [
+        { "input": "AV Route (?<_IN>) (?<_OUT>)", "output": "AV Route {_IN} to {_OUT}" },
+        { "input": "Video Route (?<_IN>) (?<_OUT>", "output": "Video Route {_IN} to {_OUT}" },
+        { "input": "Audio Route (?<_IN>) (?<_OUT>)", "output": "Audio Route {_IN} to {_OUT}" }
+      ]
+    },
+
+    {
+      "name": "Power Controller",
+      "port": 108,
+      "status_variables": {
+        "OUTLETS": {}
+      },
+      "valid_commands": [
+        { "input": "OUTLET (?<_N>[1-8])?", "function": "get", "output": "OUTLET {_N}={OUTLETS._N.POWER}" },
+        { "input": "SET OUTLET (?<_N>[1-8]) (?<_STATUS>ON|OFF)", "function": "set", "output": "OUTLET {_N}={OUTLETS._N.POWER}" }
+      ]
+    },
+
+    {
+      "name": "SignagePlayer",
+      "port": 109,
+      "status_variables": {},
+      "valid_commands": [
+        { "input": "UPDATE (?<_VAR>) (?<_VAL>)", "output": "UPDATED {_VAR} {_VAL}" }
+      ]
+    },
+
+    {
+      "name": "VideoWall",
+      "port": 110,
+      "status_variables": {
+        "LAYOUT": {}
+      },
+      "valid_commands": [
+        { "input": "GET LAYOUT?", "function": "get", "output": "LAYOUT={LAYOUT}" },
+        { "input": "SET LAYOUT (?<_N>)", "function": "set", "parameters": ["LAYOUT","_N"], "output": "LAYOUT={LAYOUT}" }
+      ]
+    },
+
     {
       "name": "VideoConference Codec",
-      "port": 111
+      "port": 111,
+      "status_variables": {
+        "CALLS": {},
+        "SELFVIEW": { "valid_values": ["ON","OFF"] },
+        "SELFVIEW_FULLSCREEN": { "valid_values": ["ON","OFF"] },
+        "CONTENT_SHARING": { "valid_values": ["ON","OFF"] }
+      },
+      "valid_commands": [
+        { "input": "CALL?", "function": "get", "output": "NO CALLS IN PROGRESS", "note": "if none; otherwise return one or more CALL {NUM} IN PROGRESS" },
+        { "input": "DIAL (?<_N>)", "output": "CALL {_N} IN PROGRESS" },
+        { "input": "HANGUP ALL", "output": "CALL {_N} DISCONNECTED" },
+        { "input": "HANGUP (?<_N>)", "output": "CALL {_N} DISCONNECTED" },
+        { "input": "SELFVIEW (?<_S>ON|OFF)", "output": "SELFVIEW={SELFVIEW}" },
+        { "input": "SELFVIEW FULLSCREEN (?<_S>ON|OFF)", "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
+        { "input": "CONTENT SHARING (?<_S>ON|OFF)", "output": "CONTENT SHARING={CONTENT_SHARING}" },
+        { "input": "SELFVIEW?", "function": "get", "output": "SELFVIEW={SELFVIEW}" },
+        { "input": "SELFVIEW FULLSCREEN?", "function": "get", "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
+        { "input": "CONTENT SHARING?", "function": "get", "output": "CONTENT SHARING={CONTENT_SHARING}" }
+      ]
     }
+
   ]
 }

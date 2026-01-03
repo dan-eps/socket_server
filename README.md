@@ -16,7 +16,7 @@ Each device is added through the JSON configuration in the [device_types.json](d
     - **Decrement** : decrement the value of specified variable
 
 ### Status Variables
-Each device will have a key-value collection of status variables.
+Each device will have a key-value collection of status variables. Each status variable must have a name, but *optionally* may have a list of valid values and/or a default value
 - Nested Values
     - status variables may also have nested key-value pairs
     - nested key-value pairs will be specified in the JSON config by using "." in the key name
