@@ -8,7 +8,7 @@
       },
       "valid_commands": [
         { "input": "PLAY?", "function": "get", "parameters": ["PLAY_STATUS"], "output": "PLAY={PLAY_STATUS}" },
-        { "input": "PLAY=(?<_STATUS>ON|OFF|PAUSE)", "function": "set", "parameters": ["PLAY_STATUS","STATUS"], "output": "PLAY={PLAY_STATUS}" },
+        { "input": "PLAY=(?<_STATUS>ON|OFF|PAUSE)", "function": "set", "parameters": ["PLAY_STATUS","_STATUS"], "output": "PLAY={PLAY_STATUS}" },
         { "input": "NEXT", "output": "NEXT" },
         { "input": "LAST", "output": "LAST" },
         { "input": "FF", "output": "FF" },
@@ -84,7 +84,7 @@
         "LEVELS": {}
       },
       "valid_commands": [
-        { "input": "SET VOLUME (?<_LEVEL>) (?<VOL>)", "output": "LEVEL {_LEVEL} = {VOL}" },
+        { "input": "SET VOLUME (?<_LEVEL>) (?<_VOL>)", "function": "set", "parameters": ["LEVELS._LEVEL.VOLUME", "_VOL"], "output": "LEVEL {_LEVEL} = {LEVELS._LEVEL.VOLUME}" },
         { "input": "ADJUST VOLUME (?<_LEVEL>) UP", "function": "inc", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL {LEVEL} = {LEVELS._LEVEL.VOLUME}" },
         { "input": "ADJUST VOLUME (?<_LEVEL>) DOWN", "function": "dec", "parameters": ["LEVELS._LEVEL.VOLUME"], "output": "LEVEL {LEVEL} = {LEVELS._LEVEL.VOLUME}" },
         { "input": "SET VOLUME MUTE (?<_LEVEL>) (?<_STATUS>ON|OFF)", "function": "set", "parameters": ["LEVELS._LEVEL.MUTE", "_STATUS"], "output": "LEVEL MUTE {LEVEL} = {LEVELS._LEVEL.MUTE}" },
@@ -133,7 +133,7 @@
       "port": 109,
       "status_variables": {},
       "valid_commands": [
-        { "input": "UPDATE (?<_VAR>) (?<_VAL>)", "output": "UPDATED {_VAR} {_VAL}" }
+        { "input": "UPDATE (?<_VAR>) (?<_VAL>)", "function": "set", "parameters": ["_VAR", "_VAL"], "output": "UPDATED {_VAR} {_VAL}" }
       ]
     },
 
@@ -159,16 +159,16 @@
         "CONTENT_SHARING": { "valid_values": ["ON","OFF"] }
       },
       "valid_commands": [
-        { "input": "CALL?", "function": "get", "output": "NO CALLS IN PROGRESS", "note": "if none; otherwise return one or more CALL {NUM} IN PROGRESS" },
-        { "input": "DIAL (?<_N>)", "output": "CALL {_N} IN PROGRESS" },
-        { "input": "HANGUP ALL", "output": "CALL {_N} DISCONNECTED" },
-        { "input": "HANGUP (?<_N>)", "output": "CALL {_N} DISCONNECTED" },
-        { "input": "SELFVIEW (?<_S>ON|OFF)", "output": "SELFVIEW={SELFVIEW}" },
-        { "input": "SELFVIEW FULLSCREEN (?<_S>ON|OFF)", "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
-        { "input": "CONTENT SHARING (?<_S>ON|OFF)", "output": "CONTENT SHARING={CONTENT_SHARING}" },
-        { "input": "SELFVIEW?", "function": "get", "output": "SELFVIEW={SELFVIEW}" },
-        { "input": "SELFVIEW FULLSCREEN?", "function": "get", "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
-        { "input": "CONTENT SHARING?", "function": "get", "output": "CONTENT SHARING={CONTENT_SHARING}" }
+        { "input": "CALL?", "function": "find", "parameters": ["IN PROGRESS"], "success": "CALL {CALL} IN PROGRESS", "fail": "NO CALLS IN PROGRESS" },
+        { "input": "DIAL (?<_N>)", "funtion": "set", "parameters": ["CALLS._N", "IN PROGRESS"], "output": "CALL {_N} IN PROGRESS" },
+        { "input": "HANGUP ALL", "function": "unset", "parameters": ["CALLS.ALL"], "output": "CALL {CALL} DISCONNECTED" },
+        { "input": "HANGUP (?<_N>)", "function": "unset", "parameters": ["CALLS._N"], "output": "CALL {_N} DISCONNECTED" },
+        { "input": "SELFVIEW (?<_S>ON|OFF)", "funtion": "set", "parameters": ["SELFVIEW", "_S"], "output": "SELFVIEW={SELFVIEW}" },
+        { "input": "SELFVIEW FULLSCREEN (?<_S>ON|OFF)", "funtion": "set", "parameters": ["SELFVIEW FULLSCREEN", "_S"], "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
+        { "input": "CONTENT SHARING (?<_S>ON|OFF)", "funtion": "set", "parameters": ["CONTENT_SHARING", "_S"], "output": "CONTENT SHARING={CONTENT_SHARING}" },
+        { "input": "SELFVIEW?", "function": "get", "parameters": ["SELFVIEW"], "output": "SELFVIEW={SELFVIEW}" },
+        { "input": "SELFVIEW FULLSCREEN?", "function": "get", "parameters": ["SELFVIEW FULLSCREEN"], "output": "SELFVIEW FULLSCREEN={SELFVIEW_FULLSCREEN}" },
+        { "input": "CONTENT SHARING?", "function": "get", "parameters": ["CONTENT_SHARING"], "output": "CONTENT SHARING={CONTENT_SHARING}" }
       ]
     }
 

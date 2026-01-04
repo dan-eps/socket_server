@@ -4,6 +4,8 @@ import json
 HOST = '127.0.0.1'
 PORT = 12345
 
+bluray_commands = ["PLAY=ON"]
+
 if __name__ == '__main__':
 
     try:
@@ -15,8 +17,12 @@ if __name__ == '__main__':
         print(f"Failed to decode JSON: {e}")
 
     
-
+    all_devices = {}
     for device_config in devices_configs:
         device = create_device_from_config(device_config)
-        print(device)
+        all_devices[device.port] = device
+
+    bluray_player = all_devices[101]
+    for command in bluray_commands:
+        
 
